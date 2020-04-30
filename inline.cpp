@@ -1,5 +1,3 @@
-#include <stdio.h>
-#include <stdlib.h>
 #include "inline.h"
 
 /* 内联函数: inline + 普通函数定义
@@ -14,8 +12,6 @@
 	2. 函数定义, 使用内联函数inline
 	*/
 
-
-
 #define F(X, Y) X / Y   // 宏函数 -- >预处理时有宏替换, 
 void test9(){
 	int ret = F(9, 3);
@@ -28,6 +24,16 @@ void test9(){
 inline int dev(int x, int y){
 	return x / y;
 }
+
+// inline适合简单的函数展开, 不适合复杂的(复杂的不会展开)
+inline int Fab(int n){
+	if (n <= 0)
+		return 0;
+	if (n == 1 || n == 2)
+		return 1;
+	return Fab(n - 1) + Fab(n - 2);
+
+}
 void test10(){
 	int a = 9;
 	int b = 3;
@@ -35,16 +41,12 @@ void test10(){
 	int ret = a / b;
 
 	ret = dev(9, 3); // 实际执行时就是ret = 9 / 3,提高效率 没有函数栈帧开销, inline的作用就是指令原地展开, 比宏函数(没有语法检查, 直接替换)好,
-}
 
-// inline适合简单的函数展开, 不适合复杂的(复杂的不会展开)
-inline int Fab(int n){
-	if (n <= 0)
-		return 0;
-	if (n == 1 || )
+	ret = Fab(40);// 不会展开
 
 }
-int main1(){
+
+int main4(){
 	test10();
 
 	system("pause");
@@ -55,7 +57,8 @@ int main1(){
 void test11(){
 	int a = 4;
 	int b = 2;
-	int ret = sub(4, 2);// 如果将内联函数和其头文件分开,因为其是展开的, 所以没有函数名, 头文件里没有对应的函数体, 所以也不会去找头文件, 导致声明和定义分开
+	//int ret = sub(4, 2); // 如果将内联函数和其头文件分开,因为其是展开的, 所以没有函数名, 头文件里没有对应的函数体, 所以也不会去找头文件, 导致声明和定义分开
+	cout << "ret = " << sub(4, 2) << endl;
 }
 int main(){
 	test11();
